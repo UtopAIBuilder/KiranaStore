@@ -1,0 +1,83 @@
+<resources>
+    <string name="app_name">KiranaStore</string>
+    <string name="drawer_open">open drawer</string>
+    <string name="drawer_close">close drawer</string>
+    <string-array name="nav_drawer_items">
+        <item>Home</item>
+        <item>Fruits</item>
+        <item>Vegitables</item>
+    </string-array>
+
+    <string-array name="group_names">
+        <item>Vegetables</item>
+        <item>Fruits</item>
+
+    </string-array>
+
+    <string-array name="product_list_items">
+        <item>Pineapple</item>
+        <item>Apple</item>
+        <item>Mango</item>
+        <item>Guava</item>
+        <item>Litchi</item>
+        <item>Pomegrante</item>
+        <item>Orange</item>
+    </string-array>
+    <string-array name="item_prices">
+        <item>Rs 10</item>
+        <item>Rs 20</item>
+        <item>Rs 30</item>
+        <item>Rs 40</item>
+        <item>Rs 50</item>
+        <item>Rs 60</item>
+        <item>Rs 70</item>
+
+
+    </string-array>
+    <string-array name="item_weights">
+        <item>200 gm</item>
+        <item>200 gm</item>
+        <item>200 gm</item>
+        <item>200 gm</item>
+        <item>200 gm</item>
+        <item>200 gm</item>
+        <item>200 gm</item>
+
+    </string-array>
+
+
+    <string-array name="Vegetables">
+        <item>Veg1</item>
+        <item>Veg2</item>
+        <item>Veg3</item>
+        <item>Veg4</item>
+        <item>Veg5</item>
+
+    </string-array>
+
+    <string-array name="Fruits">
+        <item>Fruit1</item>
+        <item>Fruit2</item>
+        <item>Fruit3</item>
+        <item>Fruit4</item>
+
+    </string-array>
+
+
+    <!-- Nav Drawer List Item Icons -->
+    <!-- Keep them in order as the titles are in -->
+    <!-- Keep them in order as the titles are in -->
+
+    <array name="nav_drawer_icons">
+        <item>@drawable/ic_home</item>
+        <item>@drawable/ic_basket</item>
+    </array>
+
+
+
+    <!-- Content Description -->
+    <string name="desc_list_item_icon">Item Icon</string>
+    <string name="title_activity_product_details">ProductDetailsActivity</string>
+
+
+</resources>
