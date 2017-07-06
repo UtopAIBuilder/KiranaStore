@@ -5,14 +5,19 @@
     <string-array name="nav_drawer_items">
         <item>Home</item>
         <item>Fruits</item>
-        <item>Vegitables</item>
+        <item>Vegetables</item>
     </string-array>
+
 
     <string-array name="group_names">
-        <item>Vegetables</item>
-        <item>Fruits</item>
-
+        <item>Cosmetics</item>
+        <item>Sanitary wares</item>
+        <item>Food beverages</item>
+        <item>Masalas</item>
+        <item>Dry fruits</item>
+        <item>Patanjali</item>
     </string-array>
+
 
     <string-array name="product_list_items">
         <item>Pineapple</item>
@@ -78,6 +83,20 @@
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
     <string name="title_activity_product_details">ProductDetailsActivity</string>
+    <string name="action_settings">setting</string>
+    <string name="search_hint">delivery location</string>
+    <string name="login">Login</string>
+    <string name="my_addresses">My Addresses</string>
+    <string name="my_orders">My Orders</string>
+    <string name="my_cart">My Cart</string>
+    <string name="offer_zone">Offer Zone</string>
+    <string name="msg_for_otp">We will send a 4 digit confirmation code to this number</string>
+    <string name="home">Home</string>
+    <string name="phone_number">Phone Number</string>
+    <string name="_91">+91</string>
+    <string name="next">Next</string>
+    <string name="category">Category!</string>
+    <string name="category_icon">Category Icon</string>
 
 
 </resources>
