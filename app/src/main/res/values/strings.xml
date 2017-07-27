@@ -79,7 +79,6 @@
     </array>
 
 
-
     <!-- Content Description -->
     <string name="desc_list_item_icon">Item Icon</string>
     <string name="title_activity_product_details">ProductDetailsActivity</string>
@@ -97,6 +96,18 @@
     <string name="next">Next</string>
     <string name="category">Category!</string>
     <string name="category_icon">Category Icon</string>
+    <string name="current_location_hint">gives approximated reference to your locality and needs to be edited before use</string>
+    <string name="welcome">Welcome</string>
+    <string name="my_information">My Information</string>
+    <string name="communicate">Communicate</string>
+    <string name="share">Share</string>
+    <string name="send">Send</string>
+    <string name="search">Search</string>
+    <string name="pineapple">Pineapple</string>
+    <string name="rs_100">Rs. 100</string>
+    <string name="_200_gm">200 gm</string>
+    <string name="_0">0</string>
+    <string name="use_my_current_location">Use my current location</string>
 
 
 </resources>

@@ -6,10 +6,16 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.influentials.kiranastore.MainActivity;
 import com.influentials.kiranastore.R;
@@ -23,6 +29,12 @@ public class ProductsListFragment extends Fragment {
     private String [] mProductNameList;
     private String[] mItemPrice;
     private  String[] mItemWeight;
+    private Menu mMenu;
+
+
+
+
+
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -30,6 +42,7 @@ public class ProductsListFragment extends Fragment {
         mProductNameList = getResources().getStringArray(R.array.product_list_items);
         mItemPrice = getResources().getStringArray(R.array.item_prices);
         mItemWeight=getResources().getStringArray(R.array.item_weights);
+
 
     }
 
@@ -39,13 +52,16 @@ public class ProductsListFragment extends Fragment {
         ViewGroup rootView= (ViewGroup) inflater.inflate(R.layout.productlist,container,false);
         listview= (ListView) rootView.findViewById(R.id.products_listview);
         productCategory=mainActivity.getProducts_category();
-        adapter=new ProductListAdapter(mainActivity,mProductNameList,mItemPrice,mItemWeight);
+        adapter=new ProductListAdapter(mMenu,mainActivity,mProductNameList,mItemPrice,mItemWeight);
+        listview.setAdapter(adapter);
 
         ListView lv=listview;
-        listview.setAdapter(adapter);
+
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+
+
 
             }
         });
@@ -60,5 +76,6 @@ public class ProductsListFragment extends Fragment {
     public void setProductListRetrieved(boolean isProductListRetrieved){
         this.isProductListRetrieved=isProductListRetrieved;
     }
+
 
 }

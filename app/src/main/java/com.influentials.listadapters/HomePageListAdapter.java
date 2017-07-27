@@ -15,9 +15,6 @@ import com.influentials.kiranastore.R;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by pesin on 6/14/17.
- */
 
 public class HomePageListAdapter extends BaseExpandableListAdapter {
 
@@ -81,14 +78,14 @@ public class HomePageListAdapter extends BaseExpandableListAdapter {
         }
 
         TextView groupName= (TextView) convertView.findViewById(R.id.group_name);
-        TextView groupSubCategoryTitle= (TextView) convertView.findViewById(R.id.subgroup_titles);
+       // TextView groupSubCategoryTitle= (TextView) convertView.findViewById(R.id.subgroup_titles);
         ImageView groupIcon= (ImageView) convertView.findViewById(R.id.group_header_icon);
 
         groupName.setText(groupNames.get(groupPosition));
         Log.d("Bz","groupNames:"+groupNames.get(groupPosition));
 
         child= (List<String>) childItem.get(groupPosition);
-        groupSubCategoryTitle.setText(getGroupSubCategoryTitles(child));
+        //groupSubCategoryTitle.setText(getGroupSubCategoryTitles(child));
        groupIcon.setImageResource(R.drawable.ic_basket);
 
         return convertView;

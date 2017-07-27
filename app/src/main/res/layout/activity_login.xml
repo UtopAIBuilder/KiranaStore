@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="50dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:gravity="center_horizontal"
+        android:textColor="#000"
+        android:textSize="15sp"
+        android:text="@string/msg_for_otp"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_gravity="center_horizontal"
+        android:paddingTop="20dp">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/_91"
+            android:textColor="#000"
+            android:textSize="15sp"
+            android:layout_marginRight="12dp"
+            android:layout_marginEnd="12dp"
+            />
+        <EditText
+            android:id="@+id/phone_for_otp"
+            android:layout_width="140dp"
+            android:layout_height="wrap_content"
+            android:maxLength="10"
+            android:hint="@string/phone_number"
+            android:inputType="phone"
+            android:gravity="center_horizontal"/>
+    </LinearLayout>
+    <Button
+        android:id="@+id/login_next_butn"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/next"/>
+
+</LinearLayout>

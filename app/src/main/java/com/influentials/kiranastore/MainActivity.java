@@ -1,79 +1,99 @@
 package com.influentials.kiranastore;
 
 
-import android.app.SearchManager;
-import android.app.SearchableInfo;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 
 import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.support.design.widget.NavigationView;
-import android.widget.AdapterView;
-import android.widget.ListView;
+
+import android.widget.RelativeLayout;
+import android.widget.TextView;
+
 
 
 import com.influentials.fragments.HomePageCategoryListFragment;
 import com.influentials.fragments.HomePageListFragment;
 import com.influentials.fragments.ProductsListFragment;
-import com.influentials.listadapters.NavDrawerListAdapter;
+
+import java.lang.reflect.Field;
 
 
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout mDrawerLayout;
-   // private ListView mDrawerList;
-    private String [] navDrawerTitles;
+    int cartCounter;
     private Boolean loginFlag=false;
     private String products_category;
     private NavigationView navigationView;
     private Toolbar toolbar;
-    private CharSequence mdrawerTitle;
-    private CharSequence mTitle;
-    private NavDrawerListAdapter adapter;
+    private SharedPreferences sharedPreferences;
     private ActionBarDrawerToggle drawerListener;
     private int [] navDrawerIcons={R.drawable.ic_home,R.drawable.ic_basket,R.drawable.ic_basket};
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-      //  mTitle = mdrawerTitle = getTitle();
-        //navDrawerTitles=getResources().getStringArray(R.array.nav_drawer_items);
+
+        sharedPreferences = getSharedPreferences("ShaPreferences", Context.MODE_PRIVATE);
+        boolean  firstTime=sharedPreferences.getBoolean("first", true);
+        if(firstTime) {
+
+            Intent intent = new Intent(MainActivity.this, LocationSearchActivity.class);
+            startActivity(intent);
+        }
+
         toolbar= (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        Field titleField ;
+        try {
+            titleField =Toolbar.class.getDeclaredField("mTitleTextView");
+            titleField.setAccessible(true);
+            TextView barTitleView = (TextView) titleField.get(toolbar);
+            barTitleView.setOnClickListener(new View.OnClickListener() {
+
+                @Override
+                public void onClick(View v) {
+                    // TODO Auto-generated method stub
+                    Log.d("Bz","actionBarClicked succsessfully");
+                    Intent intent=new Intent(MainActivity.this,LocationSearchActivity.class);
+                    startActivity(intent);
+
+                }
+            });
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
+
+
         mDrawerLayout= (DrawerLayout) findViewById(R.id.drawer_layout);
         navigationView= (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-       // handleIntent(getIntent());
 
-
-
-       // mDrawerList= (ListView) findViewById(R.id.drawer_list);
-
-       // mDrawerList.setOnItemClickListener(new SlideMenuClickListener());
 
         mDrawerLayout.setStatusBarBackground(Color.TRANSPARENT);
 
-        // setting the nav drawer list adapter
-      //  adapter = new NavDrawerListAdapter(getApplicationContext(),navDrawerTitles,navDrawerIcons);
-      //  mDrawerList.setAdapter(adapter);
         drawerListener = new ActionBarDrawerToggle(this, mDrawerLayout,toolbar,
                  // nav menu toggle icon
                 R.string.drawer_open, // nav drawer open - description for
@@ -103,29 +123,19 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
-  /*  private class SlideMenuClickListener implements
-            ListView.OnItemClickListener {
-        @Override
-        public void onItemClick(AdapterView<?> parent, View view, int position,
-                                long id) {
 
 
-            mDrawerList.setItemChecked(position,true);
-            setTitle(navDrawerTitles[position]);
-            // display view for selected nav drawer item
-           displayView(position);
-        }
-    }
-*/
 
 
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        if (drawerListener.onOptionsItemSelected(item))
+        if (item.getItemId()==R.id.action_cart)
         {
-            return true;
+           Log.d("Bz","inside action cart click");
         }
+
+
         return super.onOptionsItemSelected(item);
     }
 
@@ -152,9 +162,16 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         {
             FragmentManager fragmentManager=getSupportFragmentManager();
             FragmentTransaction transaction=fragmentManager.beginTransaction();
-            transaction.addToBackStack(null);
-            transaction.replace(R.id.main_content,fragment,null);
-            transaction.commitAllowingStateLoss();
+            if (position==0) {
+                transaction.replace(R.id.main_content, fragment, null);
+                transaction.commitAllowingStateLoss();
+            }
+            else
+            {
+                transaction.addToBackStack(null);
+                transaction.replace(R.id.main_content, fragment, null);
+                transaction.commitAllowingStateLoss();
+            }
            // mDrawerList.setItemChecked(position,true);
           // mDrawerLayout.closeDrawer(GravityCompat.START);
           //  setTitle(navDrawerTitles[position]);
@@ -167,8 +184,8 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     @Override
     public void setTitle(CharSequence title) {
-        mTitle=title;
-       // getSupportActionBar().setTitle(mTitle);
+      getSupportActionBar().setTitle(title);
+        Log.d("Bz","set title has been called");
     }
 
     @Override
@@ -197,11 +214,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
         if (item.isChecked())item.setChecked(false);
         else item.setChecked(true);
+        mDrawerLayout.closeDrawers();
         if (item.getItemId()==R.id.welcome)
         {
             item.setChecked(false);
+            mDrawerLayout.openDrawer(GravityCompat.START);
         }
-        mDrawerLayout.closeDrawers();
+
 
 
 
@@ -244,30 +263,74 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return true;
     }
 
+
+
+
+
+
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu_main,menu);
-       /* SearchManager searchManager =
-                (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        SearchView searchView =
-                (SearchView) menu.findItem(R.id.action_search).getActionView();
-        searchView.setSearchableInfo(
-                searchManager.getSearchableInfo(getComponentName()));
-*/
 
+        SharedPreferences mSharedPreferences = getSharedPreferences("ShaPreferences", Context.MODE_PRIVATE);
+        boolean  firstTime=mSharedPreferences.getBoolean("first", true);
+        if (!firstTime)
+        {
+            String mTitle=mSharedPreferences.getString("ActionBarTitle",null);
+            setTitle(mTitle);
+        }
+
+       MenuItem menuItem = menu.findItem(R.id.action_cart);
+       MenuItemCompat.setActionView(menuItem, R.layout.badge_layout);
+
+        RelativeLayout notifCount = (RelativeLayout) MenuItemCompat.getActionView(menuItem);
+        TextView tv = (TextView) notifCount.findViewById(R.id.actionbar_notifcation_textview);
+        tv.setVisibility(View.INVISIBLE);
+        Log.d("Bz","onCreateOptions has been called");
         return true;
     }
-  /*  private void handleIntent(Intent intent)
-    {
-        if (Intent.ACTION_SEARCH.equals(intent.getAction()))
-        {
-            String query=intent.getStringExtra(SearchManager.QUERY);
-        }
-    }
+
+
+
+public void setmMenu(int cartCounter)
+{
+    Log.d("Bz","setmMenu has been called");
+    this.cartCounter=cartCounter;
+    invalidateOptionsMenu();
+
+
+}
 
     @Override
-    protected void onNewIntent(Intent intent) {
-        handleIntent(intent);
+    public boolean onPrepareOptionsMenu(final Menu menu) {
+        Log.d("Bz","onPrepareOptions has been called");
+
+        MenuItem menuItem = menu.findItem(R.id.action_cart);
+        MenuItemCompat.setActionView(menuItem, R.layout.badge_layout);
+
+        final View menu_cartlist = MenuItemCompat.getActionView(menuItem);
+        RelativeLayout notifCount = (RelativeLayout) MenuItemCompat.getActionView(menuItem);
+        TextView tv = (TextView) notifCount.findViewById(R.id.actionbar_notifcation_textview);
+        if (cartCounter>0) {
+            tv.setVisibility(View.VISIBLE);
+            tv.setText(Integer.toString(cartCounter));
+        }
+        else  tv.setVisibility(View.INVISIBLE);
+        menu_cartlist.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                onOptionsItemSelected(menu.findItem(R.id.action_cart));
+            }
+        });
+
+
+        return super.onPrepareOptionsMenu(menu);
     }
-    */
+
+
+
 }
+

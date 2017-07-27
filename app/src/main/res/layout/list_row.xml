@@ -18,7 +18,9 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
             android:layout_marginRight="7dip"
+            android:layout_marginEnd="7dip"
             android:padding="2dip">
             <ImageView
                 android:layout_width="50dip"
@@ -34,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
             android:layout_toRightOf="@id/thumbnail"
-            android:text="Pineapple"
+            android:text="@string/pineapple"
             android:typeface="sans"
             android:textSize="15dip"
             android:textColor="#040404"/>
@@ -50,8 +52,9 @@
                 android:layout_height="wrap_content"
 
                 android:layout_gravity="center_horizontal|center_vertical"
-                android:text="Rs. 100"
+                android:text="@string/rs_100"
                 android:layout_marginLeft="60dip"
+                android:layout_marginStart="60dip"
                 android:layout_weight="0.23"
                 android:padding="5dip"
                 android:textSize="12dip"
@@ -63,15 +66,15 @@
                 android:layout_height="wrap_content"
 
                 android:paddingRight="25dip"
+                android:paddingEnd="25dip"
                 android:textColor="#343434"
                 android:textSize="12dip"
                 android:layout_gravity="center_horizontal|center_vertical"
-                android:text="200 gm"/>
+                android:text="@string/_200_gm"/>
             <ImageView
                 android:id="@+id/minus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:src="@drawable/ic_minus"
                 />
             <TextView
@@ -81,8 +84,8 @@
 
                 android:paddingRight="15dip"
                 android:paddingLeft="15dip"
-                android:textSize="12dip"
-                android:text="10"
+                android:textSize="12sp"
+                android:text="@string/_0"
                 android:textStyle="bold"
                 android:layout_gravity="center_horizontal|center_vertical"
                  />
@@ -91,7 +94,6 @@
                 android:id="@+id/plus"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:src="@drawable/ic_plus"/>
         </LinearLayout>
     </RelativeLayout>
