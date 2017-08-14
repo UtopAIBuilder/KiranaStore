@@ -23,6 +23,7 @@ import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.common.api.PendingResult;
@@ -53,12 +54,19 @@ public class LocationSearchActivity extends FragmentActivity implements OnConnec
     private static final int REQUEST_CHECK_SETTINGS=3;
     boolean mLocationPermissionGranted=true;
     private GoogleApiClient mGoogleApiClient;
+    private  int status;
+    ProgressBar progressoLocati;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_location_search);
+       progressoLocati= (ProgressBar) findViewById(R.id.progressoLocation);
+
+
+
+
 
         mGoogleApiClient = new GoogleApiClient
                 .Builder(this)
@@ -88,6 +96,7 @@ public class LocationSearchActivity extends FragmentActivity implements OnConnec
                 editor.commit();
                 Intent intent = new Intent(LocationSearchActivity.this, MainActivity.class);
                 startActivity(intent);
+                finish();
 
 
             }
@@ -98,30 +107,50 @@ public class LocationSearchActivity extends FragmentActivity implements OnConnec
                 Log.i("Bz", "An error occurred: " + status);
             }
         });
+
     }
 
+    @Override
+    public void onBackPressed() {
+
+    }
 
     public void currentLocationClick(View View) {
         Log.d("Bz", "clicked Current location");
-        createLocationRequest();
-
-        // Here, thisActivity is the current activity
-        if (ContextCompat.checkSelfPermission(this,
-                Manifest.permission.ACCESS_FINE_LOCATION)
-                != PackageManager.PERMISSION_GRANTED) {
 
 
-            // Should we show an explanation?
-           if (ActivityCompat.shouldShowRequestPermissionRationale(this,
-                   Manifest.permission.ACCESS_FINE_LOCATION)) {
+        progressoLocati.setVisibility(View.VISIBLE);
+        status = NetworkUtil.getConnectivityStatusString(this);
 
-                Toast.makeText(this,"permission required to identify current location",Toast.LENGTH_LONG).show();
 
-                // Show an explanation to the user *asynchronously* -- don't block
-                // this thread waiting for the user's response! After the user
-                // sees the explanation, try again to request the permission.
+        if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
 
-            }
+
+            Intent intent = new Intent(this, NoInternetConnection.class);
+            startActivity(intent);
+            progressoLocati.setVisibility(View.GONE);
+            Log.d("Bz","just after the intent");
+
+        } else {
+
+            createLocationRequest();
+            // Here, thisActivity is the current activity
+            if (ContextCompat.checkSelfPermission(this,
+                    Manifest.permission.ACCESS_FINE_LOCATION)
+                    != PackageManager.PERMISSION_GRANTED) {
+
+
+                // Should we show an explanation?
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this,
+                        Manifest.permission.ACCESS_FINE_LOCATION)) {
+
+                    Toast.makeText(this,"permission required to identify current location",Toast.LENGTH_LONG).show();
+
+                    // Show an explanation to the user *asynchronously* -- don't block
+                    // this thread waiting for the user's response! After the user
+                    // sees the explanation, try again to request the permission.
+
+                }
 
                 // No explanation needed, we can request the permission.
 
@@ -133,12 +162,14 @@ public class LocationSearchActivity extends FragmentActivity implements OnConnec
                 // app-defined int constant. The callback method gets the
                 // result of the request.
 
+            }
+            else
+            {
+                Log.d("Bz","already had the location permission,called updatelocationUi");
+                updateLocationUI();
+            }
         }
-        else
-        {
-            Log.d("Bz","already had the location permission,called updatelocationUi");
-            updateLocationUI();
-        }
+
 
 
     }
@@ -185,10 +216,12 @@ public class LocationSearchActivity extends FragmentActivity implements OnConnec
                 @Override
                 public void onResult(PlaceLikelihoodBuffer likelyPlaces) {
                     Log.d("Bz","in Onresult but not in loop");
+
                     for (PlaceLikelihood placeLikelihood : likelyPlaces) {
                         Log.i("Bz", String.format("Place '%s' has likelihood: %g",
                                 placeLikelihood.getPlace().getName(),
                                 placeLikelihood.getLikelihood()));
+
 
                         sharedPreferences = getSharedPreferences("ShaPreferences", Context.MODE_PRIVATE);
                         SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -198,6 +231,8 @@ public class LocationSearchActivity extends FragmentActivity implements OnConnec
                         editor.commit();
                         Intent intent = new Intent(LocationSearchActivity.this, MainActivity.class);
                         startActivity(intent);
+                        finish();
+                        progressoLocati.setVisibility(View.GONE);
                         Log.d("Bz","getAddress: "+placeLikelihood.getPlace().getAddress());
 
                      break;

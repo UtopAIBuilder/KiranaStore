@@ -1,8 +1,10 @@
 package com.influentials.kiranastore;
 
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.res.Configuration;
 
@@ -29,9 +31,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
-
 import com.influentials.fragments.HomePageCategoryListFragment;
-import com.influentials.fragments.HomePageListFragment;
 import com.influentials.fragments.ProductsListFragment;
 
 import java.lang.reflect.Field;
@@ -41,24 +41,59 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
     private DrawerLayout mDrawerLayout;
     int cartCounter;
-    private Boolean loginFlag=false;
+    private boolean loginFlag=false;   // to check if user is logged in or not
     private String products_category;
     private NavigationView navigationView;
     private Toolbar toolbar;
     private SharedPreferences sharedPreferences;
+    private BroadcastReceiver receiver;
+    private IntentFilter filter;
+    private boolean isConnected=false;
+    private Bundle bundleSavedInstance;
+    private int status;
+
+
     private ActionBarDrawerToggle drawerListener;
     private int [] navDrawerIcons={R.drawable.ic_home,R.drawable.ic_basket,R.drawable.ic_basket};
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        Log.d("Bz","in Oncreate");
+        bundleSavedInstance=savedInstanceState;
 
+        status = NetworkUtil.getConnectivityStatusString(this);
+
+        if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+
+                 Intent intent =new Intent(this,NoInternetConnection.class);
+                startActivity(intent);
+
+        } else {
+
+              isConnected=true;
+            garbageOfOnCreate(savedInstanceState);
+            // new ResumeForceExitPause(context).execute();
+        }
+
+
+
+
+    }
+
+
+
+
+
+    private void garbageOfOnCreate(Bundle savedInstanceState)
+    {
         sharedPreferences = getSharedPreferences("ShaPreferences", Context.MODE_PRIVATE);
-        boolean  firstTime=sharedPreferences.getBoolean("first", true);
-        if(firstTime) {
+        boolean  firstTime=sharedPreferences.getBoolean("first", true);  // to remember if it's their first visit
+        if(firstTime) {                                                    // after installation
 
             Intent intent = new Intent(MainActivity.this, LocationSearchActivity.class);
             startActivity(intent);
+            finish();
         }
 
         toolbar= (Toolbar) findViewById(R.id.toolbar);
@@ -95,7 +130,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         mDrawerLayout.setStatusBarBackground(Color.TRANSPARENT);
 
         drawerListener = new ActionBarDrawerToggle(this, mDrawerLayout,toolbar,
-                 // nav menu toggle icon
+                // nav menu toggle icon
                 R.string.drawer_open, // nav drawer open - description for
                 // accessibility
                 R.string.drawer_close // nav drawer close - description for
@@ -104,7 +139,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         {
             @Override
             public void onDrawerClosed(View drawerView) {
-               super.onDrawerClosed(drawerView);
+                super.onDrawerClosed(drawerView);
                 //getSupportActionBar().setTitle(R.string.app_name);
 
             }
@@ -123,11 +158,25 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
 
+    @Override
+    protected void onResume() {
+        super.onResume();
 
+    }
 
+    @Override
+    protected void onRestart() {
+        super.onRestart();
 
+            garbageOfOnCreate(bundleSavedInstance);
 
+    }
 
+    @Override
+    protected void onDestroy() {
+
+        super.onDestroy();
+    }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId()==R.id.action_cart)
@@ -139,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
         return super.onOptionsItemSelected(item);
     }
 
-    public void displayView(int position)
+    public void displayView(int position)   // display different fragments in main activity
     {
        Fragment fragment=null;
         Intent intent;
@@ -155,6 +204,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
             case 2:
                fragment=new ProductsListFragment();
                 break;
+
             default:
                     break;
         }
@@ -191,13 +241,17 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     @Override
     protected void onPostCreate(@Nullable Bundle savedInstanceState) {
         super.onPostCreate(savedInstanceState);
-        drawerListener.syncState();
+        if (drawerListener!=null)
+        {drawerListener.syncState();}
+
     }
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        drawerListener.onConfigurationChanged(newConfig);
+
+        if (drawerListener!=null)
+        {drawerListener.onConfigurationChanged(newConfig);}
     }
      public String getProducts_category()
     {
@@ -223,37 +277,45 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
 
 
 
+        status = NetworkUtil.getConnectivityStatusString(this);
 
+        if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
 
+            Intent intent =new Intent(this,NoInternetConnection.class);
+            startActivity(intent);
 
-            switch (item.getItemId()) {
-                case R.id.home:
-                    displayView(0);
-                   break;
-                case R.id.login:
-                    displayView(1);
-                    break;
-                case R.id.my_addresses:
-                    if (!loginFlag)
-                    {
+        }
+        else
+            {
+                switch (item.getItemId()) {
+                    case R.id.home:
+                        displayView(0);
+                        break;
+                    case R.id.login:
                         displayView(1);
-                    }
-                    break;
-                case R.id.my_orders:
-                    if (!loginFlag)
-                    {
-                        displayView(1);
-                    }
-                    break;
-                case R.id.my_cart:
-                    if (!loginFlag)
-                    {
-                        displayView(1);
-                    }
-                    break;
+                        break;
+                    case R.id.my_addresses:
+                        if (!loginFlag)
+                        {
+                            displayView(1);
+                        }
+                        break;
+                    case R.id.my_orders:
+                        if (!loginFlag)
+                        {
+                            displayView(1);
+                        }
+                        break;
+                    case R.id.my_cart:
+                        if (!loginFlag)
+                        {
+                            displayView(1);
+                        }
+                        break;
 
-                default:
-                    break;
+                    default:
+                        break;
+                }
             }
 
 

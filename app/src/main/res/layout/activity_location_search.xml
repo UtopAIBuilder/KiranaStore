@@ -59,4 +59,12 @@
         android:paddingStart="20dp"
         android:text="@string/current_location_hint"/>
 
+    <ProgressBar
+        android:id="@+id/progressoLocation"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:visibility="gone"
+        android:indeterminate="true"/>
+
 </LinearLayout>

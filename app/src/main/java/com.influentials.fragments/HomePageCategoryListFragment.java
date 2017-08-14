@@ -1,5 +1,6 @@
 package com.influentials.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,8 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import com.influentials.kiranastore.MainActivity;
+import com.influentials.kiranastore.NetworkUtil;
+import com.influentials.kiranastore.NoInternetConnection;
 import com.influentials.kiranastore.R;
 import com.influentials.listadapters.HomePageCategoryAdapter;
 
@@ -44,7 +47,21 @@ public class HomePageCategoryListFragment extends Fragment {
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                mainActivity.displayView(2);
+
+
+               int  status = NetworkUtil.getConnectivityStatusString(mainActivity);
+
+                if (status == NetworkUtil.NETWORK_STATUS_NOT_CONNECTED) {
+
+                    Intent intent =new Intent(mainActivity,NoInternetConnection.class);
+                    startActivity(intent);
+
+                } else {
+
+                    mainActivity.displayView(2);
+                    // new ResumeForceExitPause(context).execute();
+                }
+
             }
         });
         return rootView;
