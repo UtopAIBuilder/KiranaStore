@@ -52,7 +52,8 @@ public class ProductsListFragment extends Fragment {
         ViewGroup rootView= (ViewGroup) inflater.inflate(R.layout.productlist,container,false);
         listview= (ListView) rootView.findViewById(R.id.products_listview);
         productCategory=mainActivity.getProducts_category();
-        adapter=new ProductListAdapter(mMenu,mainActivity,mProductNameList,mItemPrice,mItemWeight);
+        int sizeOfListview=mProductNameList.length;
+        adapter=new ProductListAdapter(mainActivity,0,mProductNameList,mItemPrice,mItemWeight,sizeOfListview);
         listview.setAdapter(adapter);
 
         ListView lv=listview;

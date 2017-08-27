@@ -40,7 +40,7 @@ import java.lang.reflect.Field;
 public class MainActivity extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     private DrawerLayout mDrawerLayout;
-    int cartCounter;
+    int cartCounter=0;
     private boolean loginFlag=false;   // to check if user is logged in or not
     private String products_category;
     private NavigationView navigationView;
@@ -182,6 +182,13 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId()==R.id.action_cart)
         {
+            SharedPreferences sharedPreferences =getSharedPreferences("ShaPreferences", Context.MODE_PRIVATE);
+            cartCounter=sharedPreferences.getInt("CartCounter",cartCounter);
+            if (cartCounter>0)
+            {
+                Intent intent=new Intent(MainActivity.this,MyCartActivity.class);
+                startActivity(intent);
+            }
            Log.d("Bz","inside action cart click");
         }
 

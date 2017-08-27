@@ -27,7 +27,7 @@ public class ProductListAdapter extends BaseAdapter {
     private String []  ProductListnames;
     private String []  ItemPrice;
     private String []  ItemWeight;
-    private Menu menu;
+
     private int cartCounter=0;
 
 
@@ -35,21 +35,26 @@ public class ProductListAdapter extends BaseAdapter {
     private TextView productNameTextView;
     private TextView priceListTextView;
     private TextView weightListTextview;
+    private int sizeOfListView;
+    private int classId;
 
 
 
-    public ProductListAdapter(Menu menu,Context context, String [] ProductListNames, String [] ItemPrice, String[] ItemWeight)
+    public ProductListAdapter(Context context
+            ,int classId, String [] ProductListNames, String [] ItemPrice, String[] ItemWeight,int sizeOfListView)
     {
         this.context=context;
         this.ItemPrice=ItemPrice;
         this.ItemWeight=ItemWeight;
         this.ProductListnames=ProductListNames;
-        this.menu=menu;
+        this.sizeOfListView=sizeOfListView;
+        this.classId=classId;
+
     }
 
     @Override
     public int getCount() {
-        return ProductListnames.length;
+        return sizeOfListView;
     }
 
     @Override
@@ -118,10 +123,14 @@ public class ProductListAdapter extends BaseAdapter {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     cartCounter=sharedPreferences.getInt("CartCounter",cartCounter);
                     cartCounter+=1;
+                    Log.d("Bz","cartcounter"+cartCounter);
                     editor.putInt("CartCounter", cartCounter);
                     editor.apply();
 
-                    ((MainActivity)context).setmMenu(cartCounter);
+                    if (classId==0)
+                    { ((MainActivity)context).setmMenu(cartCounter);}
+
+
 
                     MyCartDbAdapter myCartDbAdapter=new MyCartDbAdapter(context);
                     int updatedData=0;
@@ -139,7 +148,7 @@ public class ProductListAdapter extends BaseAdapter {
                         Log.d("Bz","succesfullyInserted: "+insertData);
 
                     }
-                    Log.d("Bz",myCartDbAdapter.getAllData());
+                  //  Log.d("Bz",myCartDbAdapter.getAllData());
 
                     //MenuItem itemCart = menu.findItem(R.id.action_cart);
                     //LayerDrawable icon = (LayerDrawable) itemCart.getIcon();
@@ -178,16 +187,18 @@ public class ProductListAdapter extends BaseAdapter {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     cartCounter=sharedPreferences.getInt("CartCounter",cartCounter);
                     cartCounter-=1;
+                    Log.d("Bz","cartcounter"+cartCounter);
                     editor.putInt("CartCounter", cartCounter);
                     editor.apply();
-                    ((MainActivity)context).setmMenu(cartCounter);
+                    if (classId==0)
+                    { ((MainActivity)context).setmMenu(cartCounter);}
                     MyCartDbAdapter myCartDbAdapter=new MyCartDbAdapter(context);
                     if (numberOfItem==0)
                     {
                         int deletedData=0;
                         deletedData=myCartDbAdapter.deleteData(productName);
                         Log.d("Bz","deleted rows: "+deletedData);
-                        Log.d("Bz",myCartDbAdapter.getAllData());
+                       //
                     }
                     else
                     {
@@ -195,7 +206,7 @@ public class ProductListAdapter extends BaseAdapter {
 
                         updatedData=myCartDbAdapter.updateData(productName,numberOfItem);
                         Log.d("Bz","updated: "+updatedData);
-                        Log.d("Bz",myCartDbAdapter.getAllData());
+                      //  Log.d("Bz",myCartDbAdapter.getAllData());
 
 
                     }

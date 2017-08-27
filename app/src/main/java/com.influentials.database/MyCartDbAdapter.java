@@ -52,13 +52,14 @@ public class MyCartDbAdapter{
         return count;
     }
 
-    public String getAllData()
+    public Cursor getAllData()
     {
         SQLiteDatabase db=helper.getWritableDatabase();
         String[] columns={MyCartDbHelper.UID,MyCartDbHelper.PRODUCT_NAME,MyCartDbHelper.PRICE_TAG,
                 MyCartDbHelper.PRODUCT_QUANTITY,MyCartDbHelper.PRODUCT_WEIGHT};
         Cursor cursor=db.query(MyCartDbHelper.TABLE_NAME,columns,null,null,null,null,null);
-        StringBuffer stringBuffer=new StringBuffer();
+        Cursor returningCursor=cursor;
+        String tag;
         while (cursor.moveToNext())
         {
            int _id=cursor.getInt(0);
@@ -66,10 +67,12 @@ public class MyCartDbAdapter{
             String priceTag=cursor.getString(2);
             int productQuantity=cursor.getInt(3);
             String productWeight=cursor.getString(4);
-            stringBuffer.append(_id+" "+productName+" "+priceTag+" "+productQuantity+" "+productWeight+"\n ");
-
+            tag=_id+" "+productName+" "+priceTag+" "+productQuantity+" "+productWeight+"\n ";
+            Log.d("Bz",tag);
         }
-        return stringBuffer.toString();
+
+
+        return cursor;
 
     }
 
@@ -79,15 +82,24 @@ public class MyCartDbAdapter{
         String[] columns={MyCartDbHelper.PRODUCT_QUANTITY};
         int productQuantity=0;
         String [] whereArgs={productName};
-        Cursor cursor=db.query(MyCartDbHelper.TABLE_NAME,columns,MyCartDbHelper.PRODUCT_NAME+"=?",whereArgs,null,null,null,null);
-        StringBuffer stringBuffer=new StringBuffer();
-        while (cursor.moveToNext())
-        {
-            productQuantity=cursor.getInt(0);
+        try
+        {Cursor cursor=db.query(MyCartDbHelper.TABLE_NAME,columns,MyCartDbHelper.PRODUCT_NAME+"=?",whereArgs,null,null,null,null);
+
+            while (cursor.moveToNext())
+            {
+                productQuantity=cursor.getInt(0);
 
 
 
+            }
         }
+        catch (Exception e)
+        {
+            Log.d("Bz","SQLEXCEPtion"+e);
+        }
+
+
+
         return productQuantity;
     }
 
