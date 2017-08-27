@@ -112,6 +112,7 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
                     Log.d("Bz","actionBarClicked succsessfully");
                     Intent intent=new Intent(MainActivity.this,LocationSearchActivity.class);
                     startActivity(intent);
+                    finish();
 
                 }
             });
@@ -239,12 +240,12 @@ public class MainActivity extends AppCompatActivity implements NavigationView.On
     }
 
     @Override
-    protected void onPostCreate(@Nullable Bundle savedInstanceState) {
-        super.onPostCreate(savedInstanceState);
+    protected void onStart() {
+        super.onStart();
         if (drawerListener!=null)
         {drawerListener.syncState();}
-
     }
+
 
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
@@ -375,6 +376,9 @@ public void setmMenu(int cartCounter)
         final View menu_cartlist = MenuItemCompat.getActionView(menuItem);
         RelativeLayout notifCount = (RelativeLayout) MenuItemCompat.getActionView(menuItem);
         TextView tv = (TextView) notifCount.findViewById(R.id.actionbar_notifcation_textview);
+        SharedPreferences sharedPreferences =getSharedPreferences("ShaPreferences", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        cartCounter=sharedPreferences.getInt("CartCounter",cartCounter);
         if (cartCounter>0) {
             tv.setVisibility(View.VISIBLE);
             tv.setText(Integer.toString(cartCounter));
